@@ -40,6 +40,8 @@ public class SocialNetworkGraph implements GraphInterface<UserProfile> {
             if (vertex2.connect(vertex1, edgeWeight)) {
                 begin.addFriend(end.getEmail());
                 end.addFriend(begin.getEmail());
+                begin.incNumFriends();
+                end.incNumFriends();
                 edgeCount++;
                 return true;
             }
@@ -55,7 +57,9 @@ public class SocialNetworkGraph implements GraphInterface<UserProfile> {
                 result = beginVertex.disconnect(endVertex);
         }
         if (result) {
-                edgeCount--;
+            begin.decNumFriends();
+            end.decNumFriends();
+            edgeCount--;
         }
         return result;
     }
@@ -233,14 +237,32 @@ public class SocialNetworkGraph implements GraphInterface<UserProfile> {
         // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         return addEdge(begin, end, 0);
     }
+
+    
+    public void displayVertexFriends(UserProfile userProfile) {
+        Vertex<UserProfile> vertex = vertices.getValue(userProfile);
+        if (vertex == null) {
+            return; // Return no friends
+        }
+
+        Iterator<VertexInterface<UserProfile>> neighborIterator = vertex.getNeighborIterator();
+        System.out.println("\nFriends: ");
+        while (neighborIterator.hasNext()) {
+            VertexInterface<UserProfile> neighbor = neighborIterator.next();
+            System.out.print(neighbor.getLabel().getEmail() + ", ");
+        }
+        System.out.println();
+    }
     
     public void displayVertices() {
         Iterator<UserProfile> vertexIterator = vertices.getKeyIterator();
         System.out.println("Vertices in the Social Network:");
         while (vertexIterator.hasNext()) {
             UserProfile userProfile = vertexIterator.next();
-            System.out.println(userProfile);
+            System.out.print(userProfile.getName() + ", " + userProfile.getEmail());
+            displayVertexFriends(userProfile);
         }
+        System.out.println();
     }
     
         // Function to get the vertex value corresponding to a UserProfile
@@ -280,7 +302,6 @@ public class SocialNetworkGraph implements GraphInterface<UserProfile> {
             return; // Return nothing
         }
 
-        LList<String> friends = new LList<>();
         Iterator<VertexInterface<UserProfile>> neighborIterator = vertex.getNeighborIterator();
 
         System.out.println("Friends of : " + user.getName());
@@ -289,6 +310,6 @@ public class SocialNetworkGraph implements GraphInterface<UserProfile> {
             System.out.println(neighbor.getLabel().getEmail() + ", " + neighbor.getLabel().getPhone());
         }
 
-        return;
     }
+
 }

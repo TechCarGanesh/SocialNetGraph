@@ -13,6 +13,7 @@ class UserProfile {
     private String email;
     private String phone;
     private LList<String> friends;
+    private int numFriends;
 
     public UserProfile(String fName, String lName, String emailAddr, String phoneNum) {
         firstName = fName;
@@ -20,6 +21,8 @@ class UserProfile {
         email = emailAddr;
         phone = phoneNum;
         friends = new LList<>();
+        numFriends = 0;
+
     }
 
     public String getEmail() {
@@ -71,5 +74,16 @@ class UserProfile {
         return friends;
     }
     
+    public void incNumFriends() {
+        this.numFriends++;
+    }
+    
+    public void decNumFriends() {
+        this.numFriends--;
+    }
+    
+    public int getNumFriends() {
+        return this.numFriends;
+    }
 }
 
